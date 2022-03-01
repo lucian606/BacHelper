@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useRef, useState } from "react";
 
@@ -6,22 +6,33 @@ export default function LoginPage() {
 
     const emailRef = useRef();
     const passwordRef = useRef();
-    const { login } = useAuth();
+    const { login, loginWithGoogle } = useAuth();
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-    async function handleSubmit(e) {
+    async function signIn(e) {
         e.preventDefault();
-
         try {
             setError('');
             await login(emailRef.current.value, passwordRef.current.value);
-            setError('Successfully logged in');
+            navigate('/home');
         } catch (error) {
             if (error.code === 'auth/wrong-password') {
                 setError('Wrong password');
             } else {
                 setError('Failed to login');
             }
+        }
+    }
+
+    async function signInWithGoogle() {
+        try {
+            await loginWithGoogle();
+            navigate('/home');
+        } catch (error) {
+            navigate('/login');
+            setError('Failed to login with google');
+            console.log(error);
         }
     }
     
@@ -32,17 +43,17 @@ export default function LoginPage() {
             <div className="text-3xl font-bold text-gray-900 mt-2 text-center">Studdy Buddy</div>
         </div>
         <div className="max-w-sm md:max-w-md xl:max-w-xl 2xl:max-w-2xl w-full mx-auto mt-4 bg-white p-8 border border-gray-300">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form className="space-y-6">
                 {error !== '' &&
-                    <div class="bg-red-100 border border-red-400 text-red-700 rounded relative flex justify-center" role="alert">
+                    <div className="bg-red-100 border border-red-400 text-red-700 rounded relative flex justify-center" role="alert">
                         <div>
-                            <strong class="text-md xl:text-xl 2xl:text-2xl font-bold">Error: </strong>
-                            <div class="text-md xl:text-xl 2xl:text-2xl sm:inline">{error}</div>
+                            <strong className="text-md xl:text-xl 2xl:text-2xl font-bold">Error: </strong>
+                            <div className="text-md xl:text-xl 2xl:text-2xl sm:inline">{error}</div>
                         </div>
                     </div>
                 }
                 <div>
-                    <label className="text-sm xl:text-xl 2xl:text-2xl font-bold text-gray-900 block">Username</label>
+                    <label className="text-sm xl:text-xl 2xl:text-2xl font-bold text-gray-900 block">Email</label>
                     <input ref={emailRef} type="email" className="text-sm lg:text-lg xl:text-xl 2xl:text-2xl  w-full p-2 border border-gray-300 rounded mt-1" />
                 </div>
                 <div>
@@ -59,10 +70,10 @@ export default function LoginPage() {
                     </div>
                 </div>
                 <div>
-                    <button className="w-full text-sm xl:text-xl 2xl:text-2xl p-2 mt-4 text-center text-white bg-blue-500 rounded hover:bg-blue-700 font-bold">Sign In</button>
+                    <button onClick={signIn} className="w-full text-sm xl:text-xl 2xl:text-2xl p-2 mt-4 text-center text-white bg-blue-500 rounded hover:bg-blue-700 font-bold">Sign In</button>
                 </div>
-                <div class="flex justify justify-center">
-                    <button className="w-full text-sm lg:text-lg xl:text-xl 2xl:text-2xl font-bold p-2 text-white bg-red-700 rounded hover:bg-red-800 flex justify-center">
+                <div className="flex justify justify-center">
+                    <button onClick={signInWithGoogle} className="w-full text-sm lg:text-lg xl:text-xl 2xl:text-2xl font-bold p-2 text-white bg-red-700 rounded hover:bg-red-800 flex justify-center">
                         <svg viewBox="0 0 24 24" className="h-full w-4 lg:w-5 flex-no-shrink fill-current" xmlns="http://www.w3.org/2000/svg">
                             <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
                                 <path fill="#FFFFFF" d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z"/>
