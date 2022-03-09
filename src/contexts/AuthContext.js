@@ -8,6 +8,7 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
+
     const [currentUser, setCurrentUser] = useState(() => {
         try {
             const item = window.sessionStorage.getItem("user");
@@ -16,6 +17,7 @@ export function AuthProvider({ children }) {
             return null;
         }
     });
+    
     const [loading, setLoading] = useState(false);
 
     function signup(email, password) {
@@ -40,6 +42,7 @@ export function AuthProvider({ children }) {
     }
 
     useEffect(() => {
+        
         const unsubscribe = auth.onAuthStateChanged(user => {
             setCurrentUser(user);
             if (user != null) {

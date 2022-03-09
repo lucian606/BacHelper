@@ -18,6 +18,7 @@ export default function RegisterPage() {
         console.log(loading);
         if (passwordRef.current.value !== confirmPasswordRef.current.value) {
             setError('Passwords do not match');
+            setSuccess('');
             setLoading(false);
             return;
         }
@@ -25,6 +26,7 @@ export default function RegisterPage() {
         try {
             await signup(emailRef.current.value, passwordRef.current.value);
             setSuccess('Successfully registered');
+            setError('');
         } catch (error) {
             if (error.code === 'auth/email-already-in-use') {
                 setError('An account with this email already exists');
