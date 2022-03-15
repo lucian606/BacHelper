@@ -1,11 +1,13 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Navbar from "./Navbar";
+import Dropdown from "./Dropdown";
 
-export default function HomePage() {
+export default function SubjectGeneratorPage(props) {
 
     const { loading, currentUser } = useAuth();
+    const subjectRef = useRef();
 
     if (loading) {
         return (
@@ -20,6 +22,26 @@ export default function HomePage() {
         )
     }
     return (
-        <Navbar></Navbar>
+        <div>
+            <div>
+                <Navbar/>
+                <div className="flex justify justify-center m-auto">
+                    <h1>
+                        Subject Generator
+                    </h1>
+                </div>
+            </div>
+            <div className="flex justify-center m-auto">
+                <Dropdown ref={subjectRef} defaultText='Select Subject' id='subjectDropdown' options={['Limba romana', 'Matematica', 'Fizica']}/>
+            </div>
+            <div className="flex justify-center m-auto">
+                <Dropdown defaultText='Select Profile' id='profileDropdown' options={['Real', 'Uman', 'Tehnologic']}/>
+            </div>
+            <div className="flex justify justify-center mt-20">
+                <button onClick={() => console.log(subjectRef.current)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex justify-center">
+                    Generate Random Subject
+                </button>
+            </div>
+        </div>
     );
 }
