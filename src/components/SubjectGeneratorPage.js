@@ -4,10 +4,11 @@ import { useState, useRef } from "react";
 import Navbar from "./Navbar";
 import Dropdown from "./Dropdown";
 
-export default function SubjectGeneratorPage(props) {
+export default function SubjectGeneratorPage(props, ref) {
 
     const { loading, currentUser } = useAuth();
     const subjectRef = useRef();
+    const profileRef = useRef();
 
     if (loading) {
         return (
@@ -35,10 +36,10 @@ export default function SubjectGeneratorPage(props) {
                 <Dropdown ref={subjectRef} defaultText='Select Subject' id='subjectDropdown' options={['Limba romana', 'Matematica', 'Fizica']}/>
             </div>
             <div className="flex justify-center m-auto">
-                <Dropdown defaultText='Select Profile' id='profileDropdown' options={['Real', 'Uman', 'Tehnologic']}/>
+                <Dropdown ref={profileRef} defaultText='Select Profile' id='profileDropdown' options={['Real', 'Uman', 'Tehnologic']}/>
             </div>
-            <div className="flex justify justify-center mt-20">
-                <button onClick={() => console.log(subjectRef.current)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex justify-center">
+            <div className="flex justify justify-center mt-5">
+                <button onClick={() => console.log(subjectRef.current.value +' '+ profileRef.current.value)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex justify-center">
                     Generate Random Subject
                 </button>
             </div>
