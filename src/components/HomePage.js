@@ -20,6 +20,11 @@ export default function HomePage() {
         )
     }
     return (
+        <div>
         <Navbar></Navbar>
+        <div>
+            {currentUser.email}
+        </div>
+        </div>
     );
 }

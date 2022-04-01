@@ -11,7 +11,8 @@ export function AuthProvider({ children }) {
 
     const [currentUser, setCurrentUser] = useState(() => {
         try {
-            const item = window.sessionStorage.getItem("user");
+            const item = window.localStorage.getItem("user");
+            console.log(item);
             return item;
         } catch (error) {
             return null;
@@ -45,9 +46,6 @@ export function AuthProvider({ children }) {
         
         const unsubscribe = auth.onAuthStateChanged(user => {
             setCurrentUser(user);
-            if (user != null) {
-                window.sessionStorage.setItem("user", user);
-            }
         })
 
         return unsubscribe;

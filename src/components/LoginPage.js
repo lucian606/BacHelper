@@ -6,6 +6,7 @@ export default function LoginPage() {
 
     const emailRef = useRef();
     const passwordRef = useRef();
+    const stayLoggedInRef = useRef();
     const { login, loginWithGoogle } = useAuth();
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -14,7 +15,13 @@ export default function LoginPage() {
         e.preventDefault();
         try {
             setError('');
-            await login(emailRef.current.value, passwordRef.current.value);
+            let user = await login(emailRef.current.value, passwordRef.current.value);
+            window.sessionStorage.setItem("user", user);
+            window.localStorage.removeItem("user");
+            if (stayLoggedInRef.current.checked) {
+                window.localStorage.setItem("user", user);
+            }
+            console.log(stayLoggedInRef.current.checked);
             navigate('/home');
         } catch (error) {
             if (error.code === 'auth/wrong-password') {
@@ -27,7 +34,8 @@ export default function LoginPage() {
 
     async function signInWithGoogle() {
         try {
-            await loginWithGoogle();
+            let user = await loginWithGoogle();
+            window.sessionStorage.setItem("user", user);
             navigate('/home');
         } catch (error) {
             navigate('/login');
@@ -62,7 +70,7 @@ export default function LoginPage() {
                 </div>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                        <input type="checkbox" className="h-4 w-4 text-blue-300 rounded"/>
+                        <input ref={stayLoggedInRef} type="checkbox" className="h-4 w-4 text-blue-300 rounded"/>
                         <label htmlFor="" className="ml-2 text-sm lg:text-lg xl:text-xl 2xl:text-2xl text-gray-900">Remember me</label>
                     </div>
                     <div>
