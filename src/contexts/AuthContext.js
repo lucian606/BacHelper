@@ -11,7 +11,10 @@ export function AuthProvider({ children }) {
 
     const [currentUser, setCurrentUser] = useState(() => {
         try {
-            const item = window.localStorage.getItem("user");
+            let item = window.sessionStorage.getItem("user");
+            if (window.localStorage.getItem("user")) {
+                item = window.localStorage.getItem("user");
+            }
             console.log(item);
             return item;
         } catch (error) {

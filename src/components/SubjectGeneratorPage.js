@@ -1,14 +1,29 @@
-import { NavLink } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useState, useRef } from "react";
+import { storage } from "../firebase";
 import Navbar from "./Navbar";
 import Dropdown from "./Dropdown";
+import Pdf from "./Pdf";
 
 export default function SubjectGeneratorPage(props, ref) {
 
-    const { loading, currentUser } = useAuth();
+    const { loading } = useAuth();
     const subjectRef = useRef();
     const profileRef = useRef();
+    const [subjectUrl, setSubjectUrl] = useState("");
+    const [showFirstSubj, setShowFirstSubj] = useState(false);
+    const [showSecondSubj, setShowSecondSubj] = useState(false);
+    const [showThirdSubj, setShowThirdSubj] = useState(false);
+    //TODO to replace with a random url
+    const subjectLinkRef = storage.refFromURL("gs://studybuddy-d5c95.appspot.com/Istorie_Uman.1.1.pdf");
+    console.log(subjectLinkRef);
+
+    async function getSubject() {
+        let subject = await subjectLinkRef.getDownloadURL();
+        console.log(subject);
+        setSubjectUrl(subject);
+        //console.log(subjectRef.current.value +' '+ profileRef.current.value)
+    }
 
     if (loading) {
         return (
@@ -22,6 +37,7 @@ export default function SubjectGeneratorPage(props, ref) {
             </div>
         )
     }
+
     return (
         <div>
             <div>
@@ -39,10 +55,33 @@ export default function SubjectGeneratorPage(props, ref) {
                 <Dropdown ref={profileRef} defaultText='Select Profile' id='profileDropdown' options={['Real', 'Uman', 'Tehnologic']}/>
             </div>
             <div className="flex justify justify-center mt-5">
-                <button onClick={() => console.log(subjectRef.current.value +' '+ profileRef.current.value)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex justify-center">
+                <button onClick={getSubject} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex justify-center">
                     Generate Random Subject
                 </button>
             </div>
+            { subjectUrl &&
+                <div>
+                    <div className="flex justify-center">
+                        <a href={subjectUrl} target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Subiectul I</a>
+                    </div>
+                    <div className="flex justify-center">
+                        <Pdf url={subjectUrl}/>
+                    </div>
+                    <div className="flex justify-center">
+                        <a href={subjectUrl} target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Subiectul al II-lea</a>
+                    </div>
+                    <div className="flex justify-center">
+                        <Pdf url={subjectUrl}/>
+                    </div>
+                    <div className="flex justify-center">
+                        <a href={subjectUrl} target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Subiectul al III-lea</a>
+                    </div>
+                    <div className="flex justify-center">
+                        <Pdf url={subjectUrl}/>
+                    </div>
+                </div>
+            }
+
         </div>
     );
 }

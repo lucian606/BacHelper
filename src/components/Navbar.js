@@ -25,7 +25,7 @@ export default function Navbar() {
             </div>
             <div className={`w-full block flex-grow lg:flex lg:items-center lg:w-auto ${!navbarShown && 'hidden'}`}>
                     <div className="text-sm lg:flex-grow">
-                        <NavLink to="/home" className="block mt-4 lg:inline-block text-xl lg:mt-0 text-blue-200 hover:text-white mr-4 ml-4">
+                        <NavLink to="/" className="block mt-4 lg:inline-block text-xl lg:mt-0 text-blue-200 hover:text-white mr-4 ml-4">
                             HomePage
                         </NavLink>
                         <NavLink to="/subject_generator" className="block mt-4 lg:inline-block text-xl lg:mt-0 text-blue-200 hover:text-white mr-4 ml-4">

@@ -22,7 +22,7 @@ export default function LoginPage() {
                 window.localStorage.setItem("user", user);
             }
             console.log(stayLoggedInRef.current.checked);
-            navigate('/home');
+            navigate('/');
         } catch (error) {
             if (error.code === 'auth/wrong-password') {
                 setError('Wrong password');
@@ -36,7 +36,7 @@ export default function LoginPage() {
         try {
             let user = await loginWithGoogle();
             window.sessionStorage.setItem("user", user);
-            navigate('/home');
+            navigate('/');
         } catch (error) {
             navigate('/login');
             setError('Failed to login with google');
@@ -74,7 +74,7 @@ export default function LoginPage() {
                         <label htmlFor="" className="ml-2 text-sm lg:text-lg xl:text-xl 2xl:text-2xl text-gray-900">Remember me</label>
                     </div>
                     <div>
-                        <a href="#" className="text-sm xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Forgot password?</a>
+                        <a href="#" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Forgot password?</a>
                     </div>
                 </div>
                 <div>

@@ -1,12 +1,9 @@
-import { NavLink } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { useState } from "react";
 import Navbar from "./Navbar";
 
 export default function HomePage() {
 
     const { loading, currentUser } = useAuth();
-
     if (loading) {
         return (
             <div className="min-h-screen flex flex-col justify-center">
@@ -22,9 +19,9 @@ export default function HomePage() {
     return (
         <div>
         <Navbar></Navbar>
-        <div>
-            {currentUser.email}
-        </div>
+            <div>
+                {currentUser.email}
+            </div>
         </div>
     );
 }
