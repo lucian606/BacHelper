@@ -4,6 +4,7 @@ import { storage } from "../firebase";
 import Navbar from "./Navbar";
 import Dropdown from "./Dropdown";
 import Pdf from "./Pdf";
+import PDFViewer from 'pdf-viewer-reactjs';
 
 export default function SubjectGeneratorPage(props, ref) {
 
@@ -113,7 +114,9 @@ export default function SubjectGeneratorPage(props, ref) {
                         </h2>
                     </div>
                     <div className={`flex justify-center ${!showThirdSubj && 'hidden'}`}>
-                        <Pdf url={subjectUrl}/>
+                        {/* <Pdf url={subjectUrl}/> */}
+                        <PDFViewer
+                        document={{ url: subjectUrl,}}/>
                     </div>
                 </div>
             }
