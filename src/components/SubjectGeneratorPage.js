@@ -1,23 +1,26 @@
 import { useAuth } from "../contexts/AuthContext";
 import { useState, useRef } from "react";
-import { storage } from "../firebase";
 import Navbar from "./Navbar";
 import Dropdown from "./Dropdown";
 import Pdf from "./Pdf";
 import PDFViewer from 'pdf-viewer-reactjs';
+import { database, storage } from "../firebase";
 
 export default function SubjectGeneratorPage(props, ref) {
 
     const { loading } = useAuth();
     const subjectRef = useRef();
     const profileRef = useRef();
-    const [subjectUrl, setSubjectUrl] = useState("");
+    const [firstSubjectUrl, setFirstSubjectUrl] = useState("");
+    const [secondSubjectUrl, setSecondSubjectUrl] = useState("");
+    const [thirdSubjectUrl, setThirdSubjectUrl] = useState("");
     const [showFirstSubj, setShowFirstSubj] = useState(false);
     const [showSecondSubj, setShowSecondSubj] = useState(false);
     const [showThirdSubj, setShowThirdSubj] = useState(false);
-    //TODO to replace with a random url
-    const subjectLinkRef = storage.refFromURL("gs://studybuddy-d5c95.appspot.com/Istorie_Uman.1.1.pdf");
-    console.log(subjectLinkRef);
+
+    function getRandomArbitrary(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+    }
 
     function toggleFirstSubj() {
         setShowFirstSubj(!showFirstSubj);
@@ -32,10 +35,32 @@ export default function SubjectGeneratorPage(props, ref) {
     }
 
     async function getSubject() {
-        let subject = await subjectLinkRef.getDownloadURL();
-        console.log(subject);
-        setSubjectUrl(subject);
-        //console.log(subjectRef.current.value +' '+ profileRef.current.value)
+        const firstSubjectId = getRandomArbitrary(1, 6);
+        const secondSubjectId = getRandomArbitrary(1, 6);
+        const thirdSubjectId = getRandomArbitrary(1, 6);
+        let subjectName = subjectRef.current.value;
+        let profileName = profileRef.current.value;
+    
+        if (subjectName === "Limba Romana") {
+            subjectName = "Romana";
+            if (profileName === "Tehnologic") {
+                profileName = "Real";
+            }
+        }
+        database.ref(`/subjects/${subjectName}/${profileName}/1/${firstSubjectId}`).on('value', (snapshot) => {
+            setFirstSubjectUrl(snapshot.val().url);
+        }, (error) => {
+            console.log(error);
+        });
+        database.ref(`/subjects/${subjectName}/${profileName}/2/${secondSubjectId}`).on('value', (snapshot) => {
+            setSecondSubjectUrl(snapshot.val().url);
+        }, (error) => {
+        });
+        database.ref(`/subjects/${subjectName}/${profileName}/3/${thirdSubjectId}`).on('value', (snapshot) => {
+            setThirdSubjectUrl(snapshot.val().url);
+        }, (error) => {
+            console.log(error);
+        });
     }
 
     if (loading) {
@@ -62,7 +87,7 @@ export default function SubjectGeneratorPage(props, ref) {
                 </div>
             </div>
             <div className="flex justify-center m-auto">
-                <Dropdown ref={subjectRef} defaultText='Select Subject' id='subjectDropdown' options={['Limba romana', 'Matematica', 'Fizica']}/>
+                <Dropdown ref={subjectRef} defaultText='Select Subject' id='subjectDropdown' options={['Limba Romana', 'Matematica', 'Fizica']}/>
             </div>
             <div className="flex justify-center m-auto">
                 <Dropdown ref={profileRef} defaultText='Select Profile' id='profileDropdown' options={['Real', 'Uman', 'Tehnologic']}/>
@@ -72,10 +97,10 @@ export default function SubjectGeneratorPage(props, ref) {
                     Generate Random Subject
                 </button>
             </div>
-            { subjectUrl &&
+            { firstSubjectUrl && secondSubjectUrl && thirdSubjectUrl &&
                 <div>
                     <div className="flex justify-center">
-                        <a href={subjectUrl} target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Subiectul I</a>
+                        <a href={firstSubjectUrl} rel="noopener noreferrer" target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Subiectul I</a>
                     </div>
                     <div className="max-w-sm md:max-w-md xl:max-w-xl 2xl:max-w-2xl w-full mx-auto mt-4 bg-white p-8 border border-gray-300">
                         <h2 id="accordion-collapse-heading-1">
@@ -86,10 +111,10 @@ export default function SubjectGeneratorPage(props, ref) {
                         </h2>
                     </div>
                     <div className={`flex justify-center ${!showFirstSubj && 'hidden'}`}>
-                        <Pdf url={subjectUrl}/>
+                        <Pdf url={firstSubjectUrl}/>
                     </div>
                     <div className="flex justify-center">
-                        <a href={subjectUrl} target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Subiectul al II-lea</a>
+                        <a href={secondSubjectUrl} rel="noopener noreferrer" target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Subiectul al II-lea</a>
                     </div>
                     <div className="max-w-sm md:max-w-md xl:max-w-xl 2xl:max-w-2xl w-full mx-auto mt-4 bg-white p-8 border border-gray-300">
                         <h2 id="accordion-collapse-heading-1">
@@ -100,10 +125,10 @@ export default function SubjectGeneratorPage(props, ref) {
                         </h2>
                     </div>
                     <div className={`flex justify-center ${!showSecondSubj && 'hidden'}`}>
-                        <Pdf url={subjectUrl}/>
+                        <Pdf url={secondSubjectUrl}/>
                     </div>
                     <div className="flex justify-center">
-                        <a href={subjectUrl} target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Subiectul al III-lea</a>
+                        <a href={thirdSubjectUrl} rel="noopener noreferrer" target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Subiectul al III-lea</a>
                     </div>
                     <div className="max-w-sm md:max-w-md xl:max-w-xl 2xl:max-w-2xl w-full mx-auto mt-4 bg-white p-8 border border-gray-300">
                         <h2 id="accordion-collapse-heading-1">
@@ -114,9 +139,8 @@ export default function SubjectGeneratorPage(props, ref) {
                         </h2>
                     </div>
                     <div className={`flex justify-center ${!showThirdSubj && 'hidden'}`}>
-                        {/* <Pdf url={subjectUrl}/> */}
-                        <PDFViewer
-                        document={{ url: subjectUrl,}}/>
+                        <Pdf url={thirdSubjectUrl}/>
+                        {/* <PDFViewer document={{ url: thirdSubjectUrl}}/> */}
                     </div>
                 </div>
             }

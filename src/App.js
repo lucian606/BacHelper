@@ -6,6 +6,8 @@ import SubjectGeneratorPage from './components/SubjectGeneratorPage';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
+import ForumPage from './components/ForumPage';
+import SubmitPost from './components/SubmitPost';
 
 function App() {
   return (
@@ -23,7 +25,13 @@ function App() {
             <PrivateRoute>
               <SubjectGeneratorPage/>
             </PrivateRoute>
-            } />      
+            } />
+          <Route path='/forum' element={<PrivateRoute>
+            <ForumPage/>
+          </PrivateRoute>} />
+          <Route path='/submit' element={<PrivateRoute>
+            <SubmitPost/>
+          </PrivateRoute>} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
