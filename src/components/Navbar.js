@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
+import { propTypes } from "pdf-viewer-reactjs";
 
-export default function Navbar() {
+export default function Navbar(props) {
 
     const [navbarShown, setNavbarShown] = useState(true);
 
@@ -12,6 +13,13 @@ export default function Navbar() {
     const handleLogout = () => {
         window.sessionStorage.removeItem("user");
         window.localStorage.removeItem("user");
+    }
+
+    const handleForum = () => {
+        if (props.setCurrentPost) {
+            return props.setCurrentPost(null);
+        }
+        return () => {}
     }
 
     return (
@@ -35,7 +43,7 @@ export default function Navbar() {
                     <NavLink to="/subject_generator" className="block mt-5 lg:inline-block text-xl lg:mt-0 text-blue-200 hover:text-white ml-4">
                         Subject Generator
                     </NavLink>
-                    <NavLink to="/forum" className="block mt-5 lg:inline-block text-xl lg:mt-0 text-blue-200 hover:text-white ml-4">
+                    <NavLink to="/forum" onClick={handleForum} className="block mt-5 lg:inline-block text-xl lg:mt-0 text-blue-200 hover:text-white ml-4">
                         Forum
                     </NavLink>
                     <NavLink to="" className="block ml-4 mt-5 mb-5 lg:inline-block text-xl lg:mt-0 text-blue-200 hover:text-white">

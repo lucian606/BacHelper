@@ -5,12 +5,14 @@ import { firestoreDb } from "../firebase";
 import { collection, addDoc, query, getDocs, doc, getDoc } from "firebase/firestore";
 import Navbar from "./Navbar";
 import LoadingCircle from "./LoadingCircle";
+import PostPage from "./PostPage";
 
 export default function ForumPage() {
 
     const { currentUser } = useAuth();
     const [loading, setLoading] = useState(false);
     const [posts, setPosts] = useState([]);
+    const [currentPost, setCurrentPost] = useState(null);
     const navigate = useNavigate();
 
     const handleSubmit = (event) => {
@@ -33,10 +35,15 @@ export default function ForumPage() {
             const post = snapshots.docs[i];
             console.log(post);
             const postData = post.data();
+            postData.id = post.id;
             console.log(postData);
             loadedPosts.push(postData);
         }
-        setPosts(loadedPosts.reverse());
+        console.log(loadedPosts);
+        loadedPosts.sort((a, b) => {
+            return new Date(b.time) - new Date(a.time);
+        });
+        setPosts(loadedPosts);
         setLoading(false);
     }
 
@@ -52,9 +59,15 @@ export default function ForumPage() {
         )
     }
 
+    if (currentPost) {
+        return (
+            <PostPage currentPost={currentPost} setCurrentPost={setCurrentPost}/>
+        );
+    }
+
     return (
         <div>
-            <Navbar/>
+            <Navbar setCurrentPost={setCurrentPost}/>
             <div className="flex flex-col justify-center mt-2">
                 <div className="flex justify-between mb-2">
                     <span></span>
@@ -67,7 +80,8 @@ export default function ForumPage() {
                 {
                     posts.map((post, index) => {
                         return (
-                            <div className="flex flex-col w-11/12 mt-2 mb-2 border-solid border-2 rounded border-gray-600 bg-gray-200">
+                            <div key={index} className="flex flex-col w-11/12 mt-2 mb-2 border-solid border-2 rounded border-gray-600 bg-gray-200 hover:bg-gray-400"
+                                onClick={() => setCurrentPost(post)}>
                                 <div>
                                     <span className="text-2xl font-bold ml-1">{post.title}</span>
                                 </div>

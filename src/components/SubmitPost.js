@@ -31,7 +31,8 @@ export default function SubmitPost() {
                 title: titleRef.current.value,
                 description: descriptionRef.current.value,
                 authorEmail: currentUser.email,
-                comments: []
+                comments: [],
+                time: new Date().toLocaleString()
             }
             await addDoc(postsRef, newForumPost);
             setSuccess('Post created successfully');
@@ -86,12 +87,12 @@ export default function SubmitPost() {
                     </div>
                 }
                 <div className="mb-3">
-                    <label for="small-input" className="block mb-2 text-xl font-medium text-gray-900 dark:text-gray-300">Title</label>
-                    <input type="text" ref={titleRef} id="small-input" className="block p-2 w-full text-2xl text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                    <label htmlFor="post-title" className="block mb-2 text-xl font-medium text-gray-900 dark:text-gray-300">Title</label>
+                    <input type="text" ref={titleRef} id="post-title" className="block p-2 w-full text-2xl text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
                 </div>                  
                 <div className="mb-3">
-                    <label for="large-input" className="block mb-2 text-xl font-medium text-gray-900 dark:text-gray-300">Description</label>
-                    <textarea type="text" ref={descriptionRef} rows={10} id="large-input" className="block p-4 w-full text-2xl text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                    <label htmlFor="post-details" className="block mb-2 text-xl font-medium text-gray-900 dark:text-gray-300">Description</label>
+                    <textarea type="text" ref={descriptionRef} rows={10} id="post-details" className="block p-4 w-full text-2xl text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
                 </div>      
                 <div className="flex justify justify-between">
                     <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" onClick={handleCancel}>Cancel</button>
