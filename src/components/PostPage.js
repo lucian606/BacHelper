@@ -11,6 +11,7 @@ export default function PostPage(props) {
     const { currentUser } = useAuth();
     const currentPost = props.currentPost;
     const commentRef = useRef();
+    const handleNavigate = props.handleNavigate;
     const setCurrentPost = props.setCurrentPost;
 
     const postComment = async () => {
@@ -55,7 +56,7 @@ export default function PostPage(props) {
 
     return (
         <div className="flex flex-col">
-            <Navbar setCurrentPost={setCurrentPost}/>
+            <Navbar handleNavigate={handleNavigate}/>
             <div className="flex-nowrap ml-4 mr-4">
                 <div className="border-solid border-2 p-4 rounded-lg border-gray-600 mt-4 mb-4">
                     <p className="text-4xl font-bold break-all">

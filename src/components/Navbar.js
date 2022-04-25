@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
-import { propTypes } from "pdf-viewer-reactjs";
 
 export default function Navbar(props) {
 
@@ -15,9 +14,9 @@ export default function Navbar(props) {
         window.localStorage.removeItem("user");
     }
 
-    const handleForum = () => {
-        if (props.setCurrentPost) {
-            return props.setCurrentPost(null);
+    const handleForum = async () => {
+        if (props.handleNavigate) {
+            return props.handleNavigate(null);
         }
         return () => {}
     }
