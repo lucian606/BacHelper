@@ -48,21 +48,6 @@ export default function SubmitPost() {
                 setError('');
             }, 1000);
         }
-        // console.log("Document successfully written!");
-        // const q = query(postsRef);
-        // const snapshots = await getDocs(q)
-        // console.log(snapshots.size);
-        // console.log(snapshots.docs[snapshots.size - 1].id);
-        // for (let i = 0; i < snapshots.size; i++) {
-        //     console.log(snapshots.docs[i].data());
-        // }
-        // const postRef = await doc(firestoreDb, "posts", snapshots.docs[snapshots.size - 1].id);
-
-        // const newComment = {
-        //     authorEmail: "MIKASA",
-        //     comment: "This is a comment 2"
-        // };
-        // await updateDoc(postRef, { comments: arrayUnion(newComment) });
     }
 
     return (

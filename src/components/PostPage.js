@@ -37,36 +37,55 @@ export default function PostPage(props) {
     }
 
     return (
-        <div>
+        <div className="flex flex-col">
             <Navbar setCurrentPost={setCurrentPost}/>
-            {currentPost.title}
-            {currentPost.description}
-            {currentPost.authorEmail}
-            {currentPost.time}
-            <div>
-                <textarea type="text" ref={commentRef} rows={2} id="comment" className="block p-4 w-full text-2xl text-gray-900 bg-gray-50 rounded-lg border border-gray-500 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-            </div>
-            <div>
-                <button 
-                onClick={postComment}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                    Post Comment
-                </button>
-            </div>
-            <div>
-                {
-                    currentPost.comments.map((comment) => {
-                        return (
-                            <div>
-                                <div>
-                                {comment.text}
+            <div className="flex-nowrap ml-4 mr-4">
+                <div className="border-solid border-2 rounded-lg border-gray-600 mt-4 mb-4">
+                    {currentPost.title}
+                    <p className="break-word">
+                        {currentPost.description}
+                    </p>
+                    {currentPost.authorEmail}
+                    {currentPost.time}
+                </div>
+                <div className="mb-4">
+                    <textarea type="text" ref={commentRef} rows={2} id="comment" className="block p-4 w-full text-2xl text-gray-900 bg-gray-50 rounded-lg border border-gray-500 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                </div>
+                <div>
+                    <button 
+                    onClick={postComment}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mb-4">
+                        Post Comment
+                    </button>
+                </div>
+                <div className="mb-4">
+                    Comments:
+                </div>
+                <div>
+                    {
+                        currentPost.comments.map((comment) => {
+                            return (
+                                <div className="mb-4 border-solid border-2 rounded-lg border-gray-600">
+                                    <p className="break-all">
+                                        {comment.text}
+                                    </p>
+                                    <p className="break-all">
+                                        {comment.authorEmail}
+                                    </p>
+                                    <p className="break-all">
+                                        {comment.time}
+                                    </p>
+                                    {
+                                        currentUser.email === comment.authorEmail &&
+                                        <button>
+                                            DELETE ME
+                                        </button>
+                                    }
                                 </div>
-                                {comment.authorEmail}
-                                {comment.time}
-                            </div>
-                        )
-                    })
-                }
+                            )
+                        })
+                    }
+                </div>
             </div>
         </div>
     )

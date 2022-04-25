@@ -80,7 +80,7 @@ export default function ForumPage() {
                 {
                     posts.map((post, index) => {
                         return (
-                            <div key={index} className="flex flex-col w-11/12 mt-2 mb-2 border-solid border-2 rounded border-gray-600 bg-gray-200 hover:bg-gray-400"
+                            <div key={index} className="flex flex-col w-11/12 mt-2 mb-2 border-solid border-2 rounded-lg border-gray-600 bg-gray-100 hover:bg-gray-400 overflow-hidden shadow-lg hover:scale-105 transition ease-in-out"
                                 onClick={() => setCurrentPost(post)}>
                                 <div>
                                     <span className="text-2xl font-bold ml-1">{post.title}</span>
