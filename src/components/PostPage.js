@@ -5,6 +5,7 @@ import { firestoreDb } from "../firebase";
 import { arrayRemove, arrayUnion, updateDoc } from "firebase/firestore";
 import { collection, addDoc, query, getDocs, doc, getDoc } from "firebase/firestore";
 import Comment from "./Comment";
+import LoadingCircle from "./LoadingCircle";
 
 export default function PostPage(props) {
 
@@ -13,9 +14,11 @@ export default function PostPage(props) {
     const commentRef = useRef();
     const handleNavigate = props.handleNavigate;
     const setCurrentPost = props.setCurrentPost;
+    const [loading, setLoading] = useState(false);
 
     const postComment = async () => {
         try {
+            setLoading(true);
             if (commentRef.current.value === '') {
                 throw new Error('Can\'t submit empty comment');
             }
@@ -32,14 +35,17 @@ export default function PostPage(props) {
             updatedPost = updatedPost.data();
             updatedPost.id = currentPost.id;
             setCurrentPost(updatedPost);
+            setLoading(false);
         } catch (error) {
             console.log(error);
+            setLoading(false);
             return;
         }
     }
 
     const deleteComment = async (index) => {
         try {
+            setLoading(true);
             const postRef = doc(firestoreDb, "posts", currentPost.id);
             const comments = currentPost.comments;
             const comment = comments[index];
@@ -48,10 +54,21 @@ export default function PostPage(props) {
             updatedPost = updatedPost.data();
             updatedPost.id = currentPost.id;
             setCurrentPost(updatedPost);
+            setLoading(false);
         } catch (error) {
             console.log(error);
+            setLoading(false);
             return;
         }
+    }
+
+    if (loading) {
+        return (
+            <div>
+                <Navbar handleNavigate={handleNavigate}></Navbar>
+                <LoadingCircle />
+            </div>
+        )
     }
 
     return (

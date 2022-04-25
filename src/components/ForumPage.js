@@ -75,7 +75,9 @@ export default function ForumPage() {
 
     if (loading) {
         return (
-            <LoadingCircle/>
+            <Navbar handleNavigate={handleNavigate}>
+                <LoadingCircle/>
+            </Navbar>
         )
     }
 
