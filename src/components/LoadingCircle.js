@@ -1,4 +1,4 @@
-export default function LoadingCircle() {
+function LoadingCircle() {
     return (
         <div className="min-h-screen flex flex-col justify-center">
             <div className="text-center">
@@ -10,3 +10,5 @@ export default function LoadingCircle() {
         </div>
     );
 }
+
+export default LoadingCircle;
