@@ -45,6 +45,9 @@ export default function Navbar(props) {
                     <NavLink to="/forum" onClick={handleForum} className="block mt-5 lg:inline-block text-xl lg:mt-0 text-blue-200 hover:text-white ml-4">
                         Forum
                     </NavLink>
+                    <NavLink to="/quiz" className="block mt-5 lg:inline-block text-xl lg:mt-0 text-blue-200 hover:text-white ml-4">
+                        Quizzes
+                    </NavLink>
                     <NavLink to="" className="block ml-4 mt-5 mb-5 lg:inline-block text-xl lg:mt-0 text-blue-200 hover:text-white">
                         Statistics
                     </NavLink>

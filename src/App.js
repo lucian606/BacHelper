@@ -8,6 +8,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import ForumPage from './components/ForumPage';
 import SubmitPost from './components/SubmitPost';
+import QuizPage from './components/QuizPage';
 
 function App() {
   return (
@@ -31,6 +32,9 @@ function App() {
           </PrivateRoute>} />
           <Route path='/submit' element={<PrivateRoute>
             <SubmitPost/>
+          </PrivateRoute>} />
+          <Route path='/quiz' element={<PrivateRoute>
+            <QuizPage/>
           </PrivateRoute>} />
         </Routes>
       </AuthProvider>
