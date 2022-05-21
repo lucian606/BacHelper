@@ -94,8 +94,8 @@ export default function QuizPage() {
                             {
                                 currentQuestion.answers.map((answer, index) => {
                                     return (
-                                        <div className="flex justify-center items-center" key={index}>
-                                            <button onClick={() => nextQuestion(answer.isCorrect)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex justify-center">
+                                        <div className="flex justify-center items-center w-full" key={index}>
+                                            <button onClick={() => nextQuestion(answer.isCorrect)} className="w-full mt-4 ml-4 mr-4 border border-gray-600 bg-transparent hover:bg-gray-200 text-gray-black font-bold py-2 px-4 rounded flex justify-center">
                                                 {answer.answer}
                                             </button>
                                         </div>
