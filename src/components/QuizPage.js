@@ -4,6 +4,8 @@ import { useState } from "react";
 import { database } from "../firebase";
 import Dropdown from "./Dropdown";
 import { useRef } from "react";
+import { firestoreDb } from "../firebase";
+import { collection, addDoc, query, where, getDocs, getDoc, doc, arrayUnion, updateDoc } from "firebase/firestore";
 
 export default function QuizPage() {
 
@@ -18,6 +20,35 @@ export default function QuizPage() {
     const subjectNames = { "Limba Romana" : "romana", "Matematica" : "mate" };
     const subjectRef = useRef();
 
+    async function sendQuizResult(grade, subjectName) {
+        console.log("Sending quiz result");
+        console.log(grade);
+        console.log(subjectName);
+        try {
+            let path = "quiz_results_" + subjectName;
+            const quizRef = collection(firestoreDb, path);
+            const q = query(quizRef, where("email", "==", currentUser.email));
+            getDocs(q).then(async function(docs) {
+                if (docs.empty) {
+                    console.log("No stats for this email!");
+                    const newUserStats = {
+                        email: currentUser.email,
+                        grades: []
+                    }
+                    await addDoc(quizRef, newUserStats);
+                }
+                const userQuery = query(quizRef, where("email", "==", currentUser.email));
+                const userStats = await getDocs(userQuery);
+                userStats.forEach(async function(doc) {
+                    let gradeObj = { grade : grade, timestamp: new Date().toLocaleString() };
+                    await updateDoc(doc.ref, { grades: arrayUnion(gradeObj) });
+                });
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     function getRandomArbitrary(min, max) {
         return Math.floor(Math.random() * (max + 1 - min) + min);
     }
@@ -25,16 +56,12 @@ export default function QuizPage() {
     function getRandomQuiz() {
         setWrongQuestions([]);
         let newQuestions = new Set()
-        console.log("Old questions")
-        console.log(questions)
         let name = subjectRef.current.value;
-        console.log(name)
         setSubject(subjectNames[name]);
         while (newQuestions.size < 10) {
             newQuestions.add(getRandomArbitrary(1, 10))
         }
         newQuestions = Array.from(newQuestions)
-        console.log("Setting questions");
         setQuestions(newQuestions);
         setCurrentQuestionIndex(0);
         database.ref(`/questions/${subjectNames[name]}/${newQuestions[0]}`).on('value', (snapshot) => {
@@ -43,18 +70,12 @@ export default function QuizPage() {
             console.log("The read failed: " + errorObject.code);
         });
         setCurrentQuestionIndex(1);
-        console.log(currentQuestionIndex);
-        console.log(questions);
     }
 
     function nextQuestion(isCorrect, givenAnswer) {
-        console.log("current question: " + currentQuestionIndex + 1);
-        console.log("questions length: " + questions.length);
         if (isCorrect) {
-            console.log("Correct answer");
             setCorrectAnswers(correctAnswers + 1);
         } else {
-            console.log("Wrong answer");
             let wrongAnswers = wrongQuestions;
             let question = currentQuestion;
             question.givenAnswer = givenAnswer;
@@ -62,8 +83,6 @@ export default function QuizPage() {
             setWrongQuestions(wrongAnswers);
         }
         if (currentQuestionIndex < questions.length) {
-            console.log("Checking Answer");
-            console.log("Next question");
             database.ref(`/questions/${subject}/${questions[currentQuestionIndex]}`).on('value', (snapshot) => {
                 setCurrentQuestion(snapshot.val());
             }, (errorObject) => {
@@ -71,26 +90,22 @@ export default function QuizPage() {
             });
             setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
-            console.log("Quiz finished");
             setCurrentQuestionIndex(0);
             setQuestions([]);
             setCurrentQuestion(null);
-            console.log(correctAnswers);
             setFinishedQuiz(true);
-            console.log("Wrong answers");
-            console.log(wrongQuestions);
-            setSubject("");
         }
     }
 
     function handleClick() {
         getRandomQuiz();
-        console.log("clicked")
     }
 
     function handleRestart() {
+        sendQuizResult(correctAnswers, subject);
         setCorrectAnswers(0);
         setFinishedQuiz(false);
+        setSubject("");
     }
 
     if (finishedQuiz) {
@@ -112,7 +127,6 @@ export default function QuizPage() {
                 <p className="text-center p-1 font-medium text-xl"> Here are the questions you got wrong: </p>
                 {
                     wrongQuestions.map((question, index) => {
-                        console.log(question);
                         return (
                             <div key={index} className="border-solid border-2 p-2 rounded-lg border-gray-600 m-4 flex flex-col justify-center items-center">
                                 <p className="text-center p-1 font-medium text-xl">{question.question}</p>
@@ -120,7 +134,7 @@ export default function QuizPage() {
                                     question.answers.map((answer, index) => {
                                         return (
                                             <div className="flex justify-center items-center w-full" key={index}>
-                                                <button className={`w-full mt-4 ml-4 mr-4 border border-gray-600 ${answer.isCorrect && 'bg-green-500'} ${index === question.givenAnswer && `bg-red-400`} ${!answer.isCorrect && `bg-transparent`} text-gray-black font-bold py-2 px-4 rounded flex justify-center`}>
+                                                <button className={`w-full mt-4 ml-4 mr-4 border border-gray-600 ${answer.isCorrect && 'bg-green-500'} ${index === question.givenAnswer && `bg-red-400`} text-gray-black font-bold py-2 px-4 rounded flex justify-center`}>
                                                     {answer.answer}
                                                 </button>
                                             </div>

@@ -9,6 +9,7 @@ import PrivateRoute from './components/PrivateRoute';
 import ForumPage from './components/ForumPage';
 import SubmitPost from './components/SubmitPost';
 import QuizPage from './components/QuizPage';
+import StatisticsPage from './components/StatisticsPage';
 
 function App() {
   return (
@@ -35,6 +36,9 @@ function App() {
           </PrivateRoute>} />
           <Route path='/quiz' element={<PrivateRoute>
             <QuizPage/>
+          </PrivateRoute>} />
+          <Route path='/stats' element={<PrivateRoute>
+            <StatisticsPage/>
           </PrivateRoute>} />
         </Routes>
       </AuthProvider>
