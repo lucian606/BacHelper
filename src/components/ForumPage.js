@@ -18,7 +18,7 @@ export default function ForumPage() {
 
     const handleSubmit = (event) => {
         setLoading(true);
-        //navigate("/submit");
+        navigate("/submit");
     }
 
     async function getAllPosts() {

@@ -22,7 +22,7 @@ export default function StatisticsPage() {
         const path = "quiz_results_" + subjectNames[subjectName];
         const statsRef = collection(firestoreDb, path);
         const q = query(statsRef, where("email", "==", currentUser.email));
-        const { innerWidth: width, innerHeight: height } = window;
+        const { innerHeight: height } = window;
         console.log(height);
         if (height < 480) {
             console.log("Mobie");
