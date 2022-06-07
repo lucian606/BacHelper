@@ -51,12 +51,16 @@ export default function Navbar(props) {
                     <NavLink to="/stats" className="block ml-4 mt-5 mb-5 lg:inline-block text-xl lg:mt-0 text-blue-200 hover:text-white">
                         Stats
                     </NavLink>
+                    <NavLink to="/career" className="block ml-4 mt-5 mb-5 lg:inline-block text-xl lg:mt-0 text-blue-200 hover:text-white">
+                        Career Helper
+                    </NavLink>
                 </div>
                 <div>
                     <NavLink to="/login" onClick={handleLogout} className="block lg:inline-block text-xl mb-0 lg:mt-0 text-blue-200 hover:text-white ml-4 mr-4">
                         Sign Out
                     </NavLink>
                 </div>
+
             </div>
         </nav>
     )
