@@ -17,6 +17,11 @@ export default function SubjectGeneratorPage(props, ref) {
     const [showFirstSubj, setShowFirstSubj] = useState(false);
     const [showSecondSubj, setShowSecondSubj] = useState(false);
     const [showThirdSubj, setShowThirdSubj] = useState(false);
+    const subjectNames = {
+        "Limba Romana" : "Romana",
+        "Matematica" : "Mate",
+        "Istorie" : "Istorie"
+    }
 
     function getRandomArbitrary(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
@@ -40,13 +45,8 @@ export default function SubjectGeneratorPage(props, ref) {
         const thirdSubjectId = getRandomArbitrary(1, 6);
         let subjectName = subjectRef.current.value;
         let profileName = profileRef.current.value;
-    
-        if (subjectName === "Limba Romana") {
-            subjectName = "Romana";
-            if (profileName === "Tehnologic") {
-                profileName = "Real";
-            }
-        }
+        subjectName = subjectNames[subjectName];
+
         database.ref(`/subjects/${subjectName}/${profileName}/1/${firstSubjectId}`).on('value', (snapshot) => {
             setFirstSubjectUrl(snapshot.val().url);
         }, (error) => {
@@ -90,10 +90,10 @@ export default function SubjectGeneratorPage(props, ref) {
                 </div>
             </div>
             <div className="flex justify-center m-auto">
-                <Dropdown ref={subjectRef} defaultText='Select Subject' id='subjectDropdown' options={['Limba Romana', 'Matematica', 'Fizica']}/>
+                <Dropdown ref={subjectRef} defaultText='Select Subject' id='subjectDropdown' options={['Limba Romana', 'Matematica', 'Istorie']}/>
             </div>
             <div className="flex justify-center m-auto">
-                <Dropdown ref={profileRef} defaultText='Select Profile' id='profileDropdown' options={['Real', 'Uman', 'Tehnologic']}/>
+                <Dropdown ref={profileRef} defaultText='Select Profile' id='profileDropdown' options={['Real', 'Uman']}/>
             </div>
             <div className="flex justify justify-center mt-5">
                 <button onClick={getSubject} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex justify-center">
