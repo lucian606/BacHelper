@@ -22,6 +22,7 @@ export default function SubjectGeneratorPage(props, ref) {
         "Matematica" : "Mate",
         "Istorie" : "Istorie"
     }
+    const maximumId = 5;
 
     function getRandomArbitrary(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
@@ -40,9 +41,9 @@ export default function SubjectGeneratorPage(props, ref) {
     }
 
     async function getSubject() {
-        const firstSubjectId = getRandomArbitrary(1, 6);
-        const secondSubjectId = getRandomArbitrary(1, 6);
-        const thirdSubjectId = getRandomArbitrary(1, 6);
+        const firstSubjectId = getRandomArbitrary(1, maximumId + 1);
+        const secondSubjectId = getRandomArbitrary(1, maximumId + 1);
+        const thirdSubjectId = getRandomArbitrary(1, maximumId + 1);
         let subjectName = subjectRef.current.value;
         let profileName = profileRef.current.value;
         subjectName = subjectNames[subjectName];
@@ -55,6 +56,7 @@ export default function SubjectGeneratorPage(props, ref) {
         database.ref(`/subjects/${subjectName}/${profileName}/2/${secondSubjectId}`).on('value', (snapshot) => {
             setSecondSubjectUrl(snapshot.val().url);
         }, (error) => {
+            console.log(error);
         });
         database.ref(`/subjects/${subjectName}/${profileName}/3/${thirdSubjectId}`).on('value', (snapshot) => {
             setThirdSubjectUrl(snapshot.val().url);
@@ -103,12 +105,12 @@ export default function SubjectGeneratorPage(props, ref) {
             { firstSubjectUrl && secondSubjectUrl && thirdSubjectUrl &&
                 <div>
                     <div className="flex justify-center">
-                        <a href={firstSubjectUrl} rel="noopener noreferrer" target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Subiectul I</a>
+                        <a href={firstSubjectUrl} rel="noopener noreferrer" target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">First Subject</a>
                     </div>
                     <div className="max-w-sm md:max-w-md xl:max-w-xl 2xl:max-w-2xl w-full mx-auto mt-4 bg-white p-8 border border-gray-300">
                         <h2 id="accordion-collapse-heading-1">
                             <button type="button" onClick={toggleFirstSubj} className="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 rounded-t-xl border border-b-0 border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
-                                <span>Arata subiectul I</span>
+                                <span>Show First Subject</span>
                                 <svg data-accordion-icon className={`w-6 h-6 ${showFirstSubj && 'rotate-180'} shrink-0`} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                             </button>
                         </h2>
@@ -117,12 +119,12 @@ export default function SubjectGeneratorPage(props, ref) {
                         <Pdf url={firstSubjectUrl}/>
                     </div>
                     <div className="flex justify-center">
-                        <a href={secondSubjectUrl} rel="noopener noreferrer" target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Subiectul al II-lea</a>
+                        <a href={secondSubjectUrl} rel="noopener noreferrer" target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Second Subject</a>
                     </div>
                     <div className="max-w-sm md:max-w-md xl:max-w-xl 2xl:max-w-2xl w-full mx-auto mt-4 bg-white p-8 border border-gray-300">
                         <h2 id="accordion-collapse-heading-1">
                             <button type="button" onClick={toggleSecondSubj} className="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 rounded-t-xl border border-b-0 border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
-                                <span>Arata subiectul al II-lea</span>
+                                <span>Show Second Subject</span>
                                 <svg data-accordion-icon className={`w-6 h-6 ${showSecondSubj && 'rotate-180'} shrink-0`} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                             </button>
                         </h2>
@@ -131,12 +133,12 @@ export default function SubjectGeneratorPage(props, ref) {
                         <Pdf url={secondSubjectUrl}/>
                     </div>
                     <div className="flex justify-center">
-                        <a href={thirdSubjectUrl} rel="noopener noreferrer" target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Subiectul al III-lea</a>
+                        <a href={thirdSubjectUrl} rel="noopener noreferrer" target="_blank" className="text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl text-blue-500 hover:text-blue-700">Third Subject</a>
                     </div>
                     <div className="max-w-sm md:max-w-md xl:max-w-xl 2xl:max-w-2xl w-full mx-auto mt-4 bg-white p-8 border border-gray-300">
                         <h2 id="accordion-collapse-heading-1">
                             <button type="button" onClick={toggleThirdSubj} className="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 rounded-t-xl border border-b-0 border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
-                                <span>Arata subiectul al III-lea</span>
+                                <span>Show Third Subject</span>
                                 <svg data-accordion-icon className={`w-6 h-6 ${showThirdSubj && 'rotate-180'} shrink-0`} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                             </button>
                         </h2>

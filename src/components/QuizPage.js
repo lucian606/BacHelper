@@ -59,7 +59,7 @@ export default function QuizPage() {
         let name = subjectRef.current.value;
         setSubject(subjectNames[name]);
         while (newQuestions.size < 10) {
-            newQuestions.add(getRandomArbitrary(1, 10))
+            newQuestions.add(getRandomArbitrary(1, 20))
         }
         newQuestions = Array.from(newQuestions)
         setQuestions(newQuestions);
