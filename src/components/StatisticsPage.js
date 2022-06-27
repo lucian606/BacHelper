@@ -32,10 +32,10 @@ export default function StatisticsPage() {
             setHeight(300);
         } else if (height < 1024) {
             console.log("Laptop");
-            setHeight(700);
+            setHeight(500);
         } else if (height < 1200) {
             console.log("Desktop");
-            setHeight(800);
+            setHeight(600);
         } else {
             console.log("Large screen");
             setHeight(1000);

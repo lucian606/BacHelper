@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import LoadingCircle from "./LoadingCircle";
 import { firestoreDb } from "../firebase";
+import PieChart from "./PieChart";
 import { collection, addDoc, query, getDocs, doc, getDoc, deleteDoc } from "firebase/firestore";
 
 export default function CareerPage() {
@@ -13,6 +14,7 @@ export default function CareerPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentQuestion, setCurrentQuestion] = useState(null);
     const [finishedQuiz, setFinishedQuiz] = useState(false);
+    const [height, setHeight] = useState(0);
     const initialScores = {
         Informatica: 0,
         Inginerie: 0,
@@ -77,7 +79,25 @@ export default function CareerPage() {
             setFinishedQuiz(true);
             console.log(getKeyWithMaxValue(interestScores));
             setChosenSubject(getKeyWithMaxValue(interestScores));
-            setInterestScores(initialScores);
+            const { innerHeight: height } = window;
+            console.log(height);
+            if (height < 480) {
+                console.log("Mobie");
+                setHeight(200);
+            } else if (height < 768) {
+                console.log("Tablet")
+                setHeight(300);
+            } else if (height < 1024) {
+                console.log("Laptop");
+                setHeight(500);
+            } else if (height < 1200) {
+                console.log("Desktop");
+                setHeight(600);
+            } else {
+                console.log("Large screen");
+                setHeight(1000);
+            }
+            //setInterestScores(initialScores);
         }
     }
 
@@ -112,6 +132,9 @@ export default function CareerPage() {
                     <button onClick={startQuiz} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex justify-center">
                         Take another quiz
                     </button>
+                </div>
+                <div>
+                    <PieChart data={interestScores} height={height}/>
                 </div>
             </div>
         )
