@@ -13,8 +13,10 @@ export default function StatisticsPage() {
     const [loading, setLoading] = useState(false);
     const [stats, setStats] = useState([]);
     const { currentUser } = useAuth();
+    const daysAmount = {'Last 30 Days': 30, 'Last 90 Days': 90, 'All' : 0};
     const subjectNames = { "Limba Romana" : "romana", "Matematica" : "mate" };
     const subjectRef = useRef();
+    const timeWindowRef = useRef();
     const [height, setHeight] = useState(0);
     async function getStats() {
         setLoading(true);
@@ -67,14 +69,19 @@ export default function StatisticsPage() {
                 <div>
                     <button onClick={getStats} className="w-full text-sm xl:text-xl 2xl:text-2xl p-2 mt-4 text-center text-white bg-blue-500 rounded hover:bg-blue-700 font-bold">Get Stats</button>
                 </div>
-                <div className="flex justify-center m-auto">
-                    <Dropdown ref={subjectRef} defaultText='Select Subject' id='subjectDropdown' options={['Limba Romana', 'Matematica', 'All Subjects']}/>
+                <div className="flex justify-between">
+                    <div className="flex mr-5 mt-0">
+                        <Dropdown ref={subjectRef} defaultText='Select Subject' id='subjectDropdown' options={['Limba Romana', 'Matematica', 'All Subjects']}/>
+                    </div>
+                    <div className="flex ml-5 mt-0">
+                        <Dropdown ref={timeWindowRef} defaultText='Select Subject' id='subjectDropdown' options={['All', 'Last 30 Days', 'Last 90 Days']}/>
+                    </div>
                 </div>
             </div>
             {
                 stats.length > 0 &&
                 <div className="h-full m-10">
-                    <Graph userData={stats} height={height} subject={subjectRef.current.value}/>
+                    <Graph userData={stats} height={height} subject={subjectRef.current.value} timeWindow={daysAmount[timeWindowRef.current.value]}/>
                 </div>
             }
         </div>

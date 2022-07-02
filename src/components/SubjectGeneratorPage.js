@@ -17,6 +17,9 @@ export default function SubjectGeneratorPage(props, ref) {
     const [showFirstSubj, setShowFirstSubj] = useState(false);
     const [showSecondSubj, setShowSecondSubj] = useState(false);
     const [showThirdSubj, setShowThirdSubj] = useState(false);
+    const [error, setError] = useState('');
+    const [succes, setSuccess] = useState('');
+
     const subjectNames = {
         "Limba Romana" : "Romana",
         "Matematica" : "Mate",
@@ -46,23 +49,52 @@ export default function SubjectGeneratorPage(props, ref) {
         const thirdSubjectId = getRandomArbitrary(1, maximumId + 1);
         let subjectName = subjectRef.current.value;
         let profileName = profileRef.current.value;
+        let errorEncountered = false;
         subjectName = subjectNames[subjectName];
+        setError('');
 
         database.ref(`/subjects/${subjectName}/${profileName}/1/${firstSubjectId}`).on('value', (snapshot) => {
-            setFirstSubjectUrl(snapshot.val().url);
+            if (snapshot.val()) {
+                setFirstSubjectUrl(snapshot.val().url);
+            } else {
+                console.log("No data");
+                setError("Invalid profile and topic combination");
+            }
         }, (error) => {
             console.log(error);
+            setError("An error encountered")
+            errorEncountered = true;
         });
         database.ref(`/subjects/${subjectName}/${profileName}/2/${secondSubjectId}`).on('value', (snapshot) => {
-            setSecondSubjectUrl(snapshot.val().url);
+            if (snapshot.val()) {
+                setSecondSubjectUrl(snapshot.val().url);
+            } else {
+                console.log("No data");
+                setError("Invalid profile and topic combination");
+            }
         }, (error) => {
             console.log(error);
+            setError("An error encountered")
+            errorEncountered = true;
         });
         database.ref(`/subjects/${subjectName}/${profileName}/3/${thirdSubjectId}`).on('value', (snapshot) => {
-            setThirdSubjectUrl(snapshot.val().url);
+            if (snapshot.val()) {
+                setThirdSubjectUrl(snapshot.val().url);
+            } else {
+                console.log("No data");
+                setError("Invalid profile and topic combination");
+            }
         }, (error) => {
             console.log(error);
+            setError("An error encountered");
+            errorEncountered = true;
         });
+        if (!errorEncountered) {
+            setSuccess("Successfully generated subjects");
+            setTimeout(() => {
+                setSuccess('');
+            }, 2000);
+        }
     }
 
     if (loading) {
@@ -85,6 +117,22 @@ export default function SubjectGeneratorPage(props, ref) {
         <div>
             <div>
                 <Navbar/>
+                { error !== '' &&
+                        <div className="m-5 bg-red-100 border border-red-400 text-red-700 rounded relative flex justify-center" role="alert">
+                            <div>
+                                <strong className="text-2xl font-bold">Error: </strong>
+                                <div className="text-2xl sm:inline">{error}</div>
+                            </div>
+                        </div>
+                }
+                { succes !== '' &&
+                        <div className="m-5 bg-green-100 border border-green-400 text-green-700 rounded relative flex justify-center" role="alert">
+                            <div>
+                                <strong className="text-2xl font-bold">Succes: </strong>
+                                <div className="text-2xl sm:inline">{succes}</div>
+                            </div>
+                        </div>
+                }                
                 <div className="flex justify justify-center m-auto">
                     <h1>
                         Subject Generator
@@ -145,7 +193,6 @@ export default function SubjectGeneratorPage(props, ref) {
                     </div>
                     <div className={`flex justify-center ${!showThirdSubj && 'hidden'}`}>
                         <Pdf url={thirdSubjectUrl}/>
-                        {/* <PDFViewer document={{ url: thirdSubjectUrl}}/> */}
                     </div>
                 </div>
             }
