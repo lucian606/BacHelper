@@ -52,7 +52,7 @@ export default function SubjectGeneratorPage(props, ref) {
         let errorEncountered = false;
         subjectName = subjectNames[subjectName];
         setError('');
-
+        setSuccess('');
         database.ref(`/subjects/${subjectName}/${profileName}/1/${firstSubjectId}`).on('value', (snapshot) => {
             if (snapshot.val()) {
                 setFirstSubjectUrl(snapshot.val().url);
@@ -89,12 +89,13 @@ export default function SubjectGeneratorPage(props, ref) {
             setError("An error encountered");
             errorEncountered = true;
         });
-        if (!errorEncountered) {
-            setSuccess("Successfully generated subjects");
-            setTimeout(() => {
-                setSuccess('');
-            }, 2000);
-        }
+        // sleep
+        // if (!errorEncountered) {
+        //     setSuccess("Successfully generated subjects");
+        //     setTimeout(() => {
+        //         setSuccess('');
+        //     }, 2000);
+        // }
     }
 
     if (loading) {
